@@ -1,6 +1,71 @@
 {% extends "training_app/base.html" %}
 
 {% block content %}
-<p>Information sur les diffents modules d'apprentissage et sur les datasets</p>
+<div class="container">
+    <div class="card">
+      <div class="card-header">
+        Modules d'apprentissage
+      </div>
+      <div class="card-body">
+          <div class="row">
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Drebin</h5>
+                <p class="card-text">Une méthode à base du SVM pour effectuer un apprentissage automatique.</p>
+                <a href="{% url 'training_app:drebin' %}" class="btn btn-primary">Plus d'information</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card">
+      <div class="card-header">
+        Datasets
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Drebin</h5>
+                <p class="card-text">Le dataset contient 5 560 malwares répartis sur 20 familles</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Darwin</h5>
+                <p class="card-text">Le dataset dipose de plus de 7000 applications.</p>
+              </div>
+            </div>
+            </div>
+          </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">DZPlay</h5>
+                <p class="card-text">Le dataset contient 984 applications réparties sur 13 catégorie.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Virushare</h5>
+                <p class="card-text">Le dataset contient 24317 fichiers APK</p>
+              </div>
+            </div>
+            </div>
+          </div>
+      </div>
+    </div>
+</div>
 {% endblock %}
 
