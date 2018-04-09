@@ -22,7 +22,7 @@ class ModelGenerationView(TemplateView):
 
 
 class HomePage(TemplateView):
-    template_name = "training_app/index.html"
+    template_name = "training_app/dashboard.html"
 
 
 class DrebinPage(TemplateView):
