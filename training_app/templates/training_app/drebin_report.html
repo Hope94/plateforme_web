@@ -1,35 +1,77 @@
-{% extends "training_app/base.html" %}
+{% extends 'training_app/base.html' %}
+{% load bootstrap4  %}
+{% block navbar %}
+    <ul class="nav">
+        <li>
+            <a href="dashboard.html">
+                <i class="pe-7s-graph"></i>
+                <p>Tableau de bord</p>
+            </a>
+        </li>
+        <li class="active">
+            <a href="drebin.html">
+                <i class="pe-7s-note2"></i>
+                <p>Drebin</p>
+            </a>
+        </li>
+        <li>
+            <a href="apks.html">
+                <i class="pe-7s-news-paper"></i>
+                <p>Apks</p>
+            </a>
+        </li>
+        <li>
+            <a href="datasets.html">
+                <i class="pe-7s-science"></i>
+                <p>Datasets</p>
+            </a>
+        </li>
+        <li class="active-pro">
+            <a href="#">
+                <i class="pe-7s-rocket"></i>
+                <p> Anti-malware</p>
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
 {% block content %}
-    <div class="container">
-            <div class="card">
-              <h5 class="card-header">Modèle de détection</h5>
-              <div class="card-body">
-                <p class="card-text">Le modèle de détection Drebin qui contient les diffrents caractéristiques avec leurs poids respectifs est téléchargable sous forme d'un fichier .csv </p>
-                <a href="{% url "training_app:download_csv" %}" class="btn btn-primary pull-right">Télécharger</a>
-              </div>
-            </div>
-    </div>
-    <div class="container">
-            <div class="card">
-              <h5 class="card-header">Rapport de validation </h5>
-              <div class="card-body">
-                  <table class="table">
-                      <thead>
-                        <tr>
-                          <th scope="col">Métrique</th>
-                          <th scope="col">Valeur</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for key, value in validation_report.items %}
-                              <tr>
-                                <th scope="row">{{ key }}</th>
-                                <td>{{ value }}</td>
-                              </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-              </div>
-            </div>
+    <div class="row">
+        <div class="col-md-12">
+               <div class="container">
+                    <div class="card">
+                          <h5 class="card-header">Modèle de détection</h5>
+                          <div class="card-body">
+                            <p class="card-text">Le modèle de détection Drebin qui contient les diffrents caractéristiques avec leurs poids respectifs est téléchargable sous forme d'un fichier .csv </p>
+                            <a href="{% url "training_app:download_csv" %}" class="btn btn-primary pull-right">Télécharger</a>
+                          </div>
+                    </div>
+               </div>
+               <div class="container">
+                    <div class="card">
+                          <h5 class="card-header">Rapport de validation </h5>
+                          <div class="card-body">
+                              <table class="table">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">Métrique</th>
+                                      <th scope="col">Valeur</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for key, value in validation_report.items %}
+                                          <tr>
+                                            <th scope="row">{{ key }}</th>
+                                            <td>{{ value }}</td>
+                                          </tr>
+                                    {% endfor %}
+                                  </tbody>
+                                </table>
+                          </div>
+                    </div>
+               </div>
+        </div>
     </div>
 {% endblock %}
+
+

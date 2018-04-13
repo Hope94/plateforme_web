@@ -1,20 +1,56 @@
-{% extends "training_app/base.html" %}
-{% load bootstrap3  %}
-
+{% extends 'training_app/base.html' %}
+{% load bootstrap4  %}
+{% block navbar %}
+    <ul class="nav">
+        <li>
+            <a href="{% url 'training_app:index'%}">
+                <i class="pe-7s-graph"></i>
+                <p>Tableau de bord</p>
+            </a>
+        </li>
+        <li class="active">
+            <a href="{% url 'training_app:drebin' %}">
+                <i class="pe-7s-note2"></i>
+                <p>Drebin</p>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="pe-7s-news-paper"></i>
+                <p>Apks</p>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="pe-7s-science"></i>
+                <p>Datasets</p>
+            </a>
+        </li>
+        <li class="active-pro">
+            <a href="#">
+                <i class="pe-7s-rocket"></i>
+                <p> Anti-malware</p>
+            </a>
+        </li>
+    </ul>
+{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="card">
-                      <div class="card-header">
-                        Apprentissage
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                      <div class="header">
+                        <h4 class="title"> Réapprentissage avec DREBIN</h4>
                       </div>
-                      <div class="card-body">
-                          <form method="POST">
-                            {% csrf_token %}
-                            {% bootstrap_form form %}
-                            <input type="submit" class="btn btn-default" value="Lancer l'apprentissage">
-                          </form>
+                      <div class="content">
+                            <form method="POST">
+                                {% csrf_token %}
+                                {% bootstrap_form form %}
+                                <button type="submit" class="btn btn-info btn-fill pull-right">Lancer l'apprentissage</button>
+                                <div class="clearfix"></div>
+                             </form>
                       </div>
+                </div>
+            </div>
         </div>
-    </div>
 {% endblock %}
