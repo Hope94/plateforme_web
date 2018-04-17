@@ -5,7 +5,8 @@ import django
 django.setup()
 
 import hashlib
-from main.models import Apk,Feature,Extract,Dataset
+from django.forms.models import model_to_dict
+from main.models import Apk,Feature,Extract,Dataset,PermissionAPI,SuspiciousAPI
 from main.androguard.androguard.util import get_certificate_name_string
 from pfe_plateforme_web.settings import APK_DIR
 
@@ -53,7 +54,7 @@ def get_hashes(app_path, block_size=2 ** 8):
     return [md5.hexdigest(), sha1.hexdigest(), sha256.hexdigest()]
 
 
-def insert_apk(path_to_apk,malignity=-1,dataset=Dataset.objects.get_or_create(name="user"))->Apk:
+def insert_apk(path_to_apk,malignity=-1)->Apk:
     androguard=AndroguardAnalysis(app_path=path_to_apk)
     hashes=get_hashes(path_to_apk)
     name =androguard.a.get_app_name()
@@ -64,7 +65,6 @@ def insert_apk(path_to_apk,malignity=-1,dataset=Dataset.objects.get_or_create(na
     md5 = hashes[0]
     sha1 = hashes[1]
     sha256 = hashes[2]
-
     apk=Apk.objects.get_or_create(name=name
                                   ,malignity=malignity
                                   ,package=package
@@ -75,12 +75,12 @@ def insert_apk(path_to_apk,malignity=-1,dataset=Dataset.objects.get_or_create(na
     return apk
 
 def insert_feature(name,type)->Feature:
-    feature=Feature.objects.get_or_create(name,type)
+    feature=Feature.objects.get_or_create(name=name,type=type)[0]
     feature.save()
     return feature
 
 def insert_extract(apk,feature,nb_feature)->Extract:
-    extract=Extract.objects.get_or_create(apk=apk,feature=feature,nb_feature=nb_feature)
+    extract=Extract.objects.get_or_create(apk=apk,feature=feature,nb_feature=nb_feature)[0]
     extract.save()
     return extract
 
@@ -92,34 +92,45 @@ def get_apks()->list:
     return [apk for apk in Apk.objects.all()]
 
 def get_apk_features(apk_id: int) -> list:
-    apk=Apk.objects.get(pk=apk_id)[0]
-    extract = Extract.objects.get(apk=apk)
-    return [(feature,nb_feature) for (feature,nb_feature) in (extract.feature,extract.nb_feature)]
+    apk=Apk.objects.get(pk=apk_id)
+    list_extract = Extract.objects.filter(apk=apk).all()
+    return [(e.feature,e.nb_feature) for e in list_extract]
 
 def get_apk_malignity(apk_name: str) -> int:
-    apk=Apk.objects.get(name=apk_name)[0]
+    apk=Apk.objects.get(name=apk_name)
     return apk.malignity
 
 
-def get_datasets_apks(datasets: list) -> list:
-    return [apk for apk in Apk.objects.get(datasets=datasets)]
-
-def is_apk_in_db(apk_name: str, apk_dataset: str) -> bool:
-    datasets=Apk.objects.get(name=apk_name).datasets
+def get_datasets_apks(datasets: list) -> set:
+    apks=set()
     for dataset in datasets:
-        if dataset.name==apk_dataset:
-            return True
+        apks.update(dataset.apk_set.all())
+    return apks
 
-    return False
+def is_apk_in_db(sha256) -> bool:
+    num_results = Apk.objects.filter (sha256=sha256).count ()
+    return num_results!=0
+
+
+def get_api_permission_mapping():
+    return PermissionAPI.objects.all()
+
+
+def get_suspicious_api():
+    return SuspiciousAPI.objects.all()
+
+def add_apk_to_dataset(apk:Apk,dataset_name:str):
+    dataset = Dataset.objects.get_or_create (name=dataset_name)[0]
+    dataset.save()
+    apk.datasets.add(dataset)
+    apk.save()
+
 
 
 if __name__=='__main__':
     app_name="sample.apk"
     path_to_apk=os.path.join(APK_DIR,app_name)
-    print(path_to_apk)
-    #apk=add_apk(path_to_apk=path_to_apk,malignity="1")
-    for apk in get_apks():
-        print(apk.id)
+    print(insert_apk(path_to_apk=path_to_apk,malignity="0").pk)
 
 
 
