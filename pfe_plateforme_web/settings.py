@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'detection_app',
     'training_app',
     'accounts',
+    'watson',
 ]
 
 MIDDLEWARE = [

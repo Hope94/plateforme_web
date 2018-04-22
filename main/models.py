@@ -3,7 +3,8 @@ from django.db import models
 
 # Create your models here.
 class Dataset (models.Model):
-    name = models.CharField (max_length=30,unique=True)
+    name = models.CharField (max_length=30, unique=True)
+
     def __str__(self):
         return self.name
 
@@ -26,42 +27,43 @@ class Apk (models.Model):
 
 
 class Feature (models.Model):
-    name = models.TextField (unique=True)
+    name = models.TextField ()
     type = models.TextField ()
 
     def __str__(self):
         return self.name
 
+    class Meta:
+        unique_together = ('name', 'type',)
+
 
 class Extract (models.Model):
-    apk = models.ForeignKey ('Apk', on_delete=models.CASCADE)
-    feature = models.ForeignKey ('Feature', on_delete=models.CASCADE)
+    apk = models.ForeignKey ('Apk', on_delete=models.CASCADE,related_name='extractions')
+    feature = models.ForeignKey ('Feature', on_delete=models.CASCADE,related_name='extractions')
     nb_feature = models.PositiveIntegerField ()  # nombre de caractéristiques
     extracted_on = models.DateField (auto_now_add=True)  # date d'extraction des caractéristiques
 
     def __str__(self):
-        return "{0} - {1}".format(self.apk.name,self.feature.name)
+        return "{0} - {1}".format (self.apk.name, self.feature.name)
 
     class Meta:
-        unique_together=('apk','feature',)
+        unique_together = ('apk', 'feature',)
 
 
-class SuspiciousAPI(models.Model):
-    api=models.TextField(unique=True)
+
+class SuspiciousAPI (models.Model):
+    api = models.TextField (unique=True)
 
     def __str__(self):
         return self.api
 
 
-class PermissionAPI(models.Model):
-    api=models.TextField()
-    permission=models.TextField()
+class PermissionAPI (models.Model):
+    api = models.TextField ()
+    permission = models.TextField ()
 
     def __str__(self):
-        return self.api
+        return self.api + ' ' + self.permission
 
     class Meta:
-        unique_together=('api','permission',)
-
-
-
+        unique_together = ('api', 'permission',)
